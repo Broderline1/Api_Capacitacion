@@ -9,5 +9,7 @@
         public string usuario { get; set; }
 
         public string contrasena { get; set; }
+
+        public List<TaskModel> tasks { get; set; } = [];
     }
 }

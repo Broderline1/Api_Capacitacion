@@ -1,6 +1,6 @@
 ﻿namespace API_Capacitacion.DTO.User
 {
-    internal class UpdateUserDTO
+    public class UpdateUserDTO
     {
 
 
