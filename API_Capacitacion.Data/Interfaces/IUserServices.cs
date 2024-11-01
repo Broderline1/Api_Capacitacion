@@ -5,13 +5,13 @@ namespace API_Capacitacion.Data.Interfaces
 {
     public interface IUserServices
     {
-        public Task<UserModel?> Create(CreateUserDTO createUserDTO);
+        public Task<UserModel?> Create(CreateUserDTO createUserDto);
 
         public Task<IEnumerable<UserModel>> FindAll();
 
         public Task<UserModel?> FindOne( int userId);
 
-        public Task<UserModel?> Update(UpdateUserDTO updateuserDto);
+        public Task<UserModel?> Update(int iduser, UpdateUserDTO updateUserDto);
 
         public Task<UserModel?> Remove(int userId);
     }

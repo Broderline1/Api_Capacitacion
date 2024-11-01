@@ -42,8 +42,13 @@ namespace API_Capacitacion.Controllers
 
         // PUT api/<TareaController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Update(int idtask, [FromBody] UpdateTaskDTO updateTaskDto)
         {
+            TaskModel? task = await _services.Update(idtask, updateTaskDto);
+            if(task == null) 
+                return NotFound();
+
+            return Ok(task);
         }
 
         // DELETE api/<TareaController>/5

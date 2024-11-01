@@ -2,10 +2,10 @@
 {
     public class CreateUserDTO
     {
-        public string Names { get; set; }
+        public string names { get; set; }
 
-        public string Users { get; set; }
+        public string users { get; set; }
 
-        public string Passwd { get; set; }
+        public string password { get; set; }
     }
 }

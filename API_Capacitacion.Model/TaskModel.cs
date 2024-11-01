@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace API_Capacitacion.Model
+﻿namespace API_Capacitacion.Model
 {
     public class TaskModel
     {
@@ -16,6 +10,6 @@ namespace API_Capacitacion.Model
 
         public bool Completada { get; set; }
 
-        public UserModel Usuario { get; set; }
+        public UserModel Usuarios { get; set; }
     }
 }
