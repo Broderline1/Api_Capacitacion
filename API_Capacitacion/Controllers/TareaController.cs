@@ -2,6 +2,7 @@
 using API_Capacitacion.DTO.Task;
 using API_Capacitacion.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,16 +18,26 @@ namespace API_Capacitacion.Controllers
 
         // GET: api/<TareaController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> FindAll([FromQuery] int userId)
         {
-            return new string[] { "value1", "value2" };
+            IEnumerable<TaskModel> tasks = await _services.FindAll(userId);
+            if(tasks.Count() == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(tasks);
         }
 
         // GET api/<TareaController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> FindOne(int id)
         {
-            return "value";
+            TaskModel? task = await _services.FindOne(id);
+            if (task == null)
+                return NotFound();
+
+            return Ok(task);
         }
 
         // POST api/<TareaController>
@@ -53,8 +64,25 @@ namespace API_Capacitacion.Controllers
 
         // DELETE api/<TareaController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Remove(int taskId)
         {
+            TaskModel? task = await _services.Remove(taskId);
+            if (task == null) 
+                return NotFound();
+
+            return Ok(task);
+        }
+
+        [HttpPut("Togglestatus/{taskId}")]
+        public async Task<IActionResult> Togglestatus(int taskId)
+        {
+            TaskModel? Tasks = await _services.ToggleStatus(taskId);
+            if (Tasks == null)
+            {
+                return NotFound();
+            }
+            return Ok(Tasks);
+
         }
     }
 }

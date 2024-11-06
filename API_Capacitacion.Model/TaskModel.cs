@@ -10,6 +10,6 @@
 
         public bool Completada { get; set; }
 
-        public UserModel Usuarios { get; set; }
+        public UserModel Usuarioos { get; set; }
     }
 }

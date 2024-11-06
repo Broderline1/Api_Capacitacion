@@ -8,5 +8,13 @@ namespace API_Capacitacion.Data.Interfaces
         public Task<TaskModel> Create(CreateTaskDTO createTareaDTO);
 
         public Task<TaskModel> Update(int idtask, UpdateTaskDTO updateTaskDto);
+
+        public Task<TaskModel> FindOne(int taskId);
+
+        public Task<IEnumerable<TaskModel>> FindAll(int userId);
+
+        public Task<TaskModel> Remove(int taskId);
+
+        public Task<TaskModel?> ToggleStatus(int taskId);
     }
 }

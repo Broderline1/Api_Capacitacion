@@ -3,6 +3,8 @@ using API_Capacitacion.DTO.Task;
 using API_Capacitacion.Model;
 using Dapper;
 using Npgsql;
+using System.Data.SqlTypes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace API_Capacitacion.Data.Services
 {
@@ -39,7 +41,7 @@ namespace API_Capacitacion.Data.Services
                     },
                     map: (tarea, usuario) =>
                     {
-                        tarea.Usuarios = usuario;
+                        tarea.Usuarioos = usuario;
 
                         return tarea;
                     },
@@ -91,11 +93,115 @@ namespace API_Capacitacion.Data.Services
         #endregion
 
         #region FindAll
+        public async Task<IEnumerable<TaskModel>> FindAll(int userId)
+        {
+            using NpgsqlConnection database = CreateConnection();
+            string SqlQuery = "SELECT * FROM view_tarea where idUsuario = @userId";
 
+            try
+            {
+                await database.OpenAsync();
+
+                var result = await database.QueryAsync<TaskModel, UserModel, TaskModel>(
+                    SqlQuery,
+                    param: new
+                    {
+                        userId
+                    },
+                    map: (task, user) =>
+                    {
+                        task.Usuarioos = user;
+                        return task;
+                    },
+                    splitOn: "usuarioId"
+                    );
+                await database.CloseAsync();
+                return result;
+            }
+            catch( Exception ex )
+            {
+                return null;
+            }
+
+        }
         #endregion
 
-        #region Delete 
+        #region FindOne
+        public async Task<TaskModel?> FindOne(int taskId)
+        {
+            NpgsqlConnection database = CreateConnection();
 
+            string sqlQuery = "select * from tarea where idTarea = @IdTarea";
+
+            try
+            {
+                await database.OpenAsync();
+
+                TaskModel? result = await database.QueryFirstOrDefaultAsync<TaskModel>(
+                    sqlQuery,
+                    param: new
+                    {
+                        idTarea = taskId
+                    }
+                    );
+                await database.CloseAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #region Remove
+        public async Task<TaskModel?> Remove(int taskId)
+        {
+            NpgsqlConnection database = CreateConnection();
+            string sqlQuery = "select * from fun_task_remove(p_idTarea := @idtarea)";
+
+            try
+            {
+                TaskModel? result = await database.QueryFirstOrDefaultAsync<TaskModel>(
+                    sqlQuery,
+                    param: new
+                    {
+                        idtarea = taskId
+                    }
+                    );
+                await database.CloseAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+        #endregion
+
+        #region ToggleStatus
+        public async Task<TaskModel?> ToggleStatus(int taskId)
+        {
+            NpgsqlConnection database = CreateConnection();
+            string sqlQuery = "SELECT * FROM fun_task_togglestatus(p_idTarea := @idTarea)";
+
+            try
+            {
+                TaskModel? result = await database.QueryFirstOrDefaultAsync<TaskModel>(
+                    sqlQuery,
+                    param: new
+                    {
+                        idTarea = taskId
+                    }
+                    );
+                await database.CloseAsync();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
         #endregion
     }
 }
